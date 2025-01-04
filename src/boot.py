@@ -1,5 +1,6 @@
 # This file is executed on every boot (including wake-boot from deep sleep)
 # from debug_print import print
+import config
 
 import esp
 esp.osdebug(None)
@@ -10,8 +11,9 @@ esp.osdebug(None)
 import wifi
 wifi.connect()
 
-# import webrepl
-# webrepl.start(password='')
+if config.WEBREPL_ENABLE:
+    import webrepl
+    webrepl.start(password=config.WEBREPL_PASSWORD)
 
 # break potential bootloop by giving time to connect and fix
 import utime
