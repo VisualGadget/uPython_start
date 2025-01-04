@@ -2,7 +2,7 @@
 
 # Flash firmware.bin to ESP8266
 
-source ../venv/bin/activate
+# source ../venv/bin/activate
 
 et="esptool.py --port /dev/ttyUSB0 --chip esp8266 --baud 460800"
 # $et erase_flash
