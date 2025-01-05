@@ -1,5 +1,4 @@
 import machine
-import ntptime
 import utime
 
 import config
@@ -19,10 +18,14 @@ watchdog = wdt_class()  # global use instance
 
 
 def sleep_s(interval: int):
-    watchdog.feed()
-    for _ in range(interval):
-        utime.sleep(1)
+    while True:
         watchdog.feed()
+
+        if interval <= 0:
+            return
+
+        utime.sleep(1)
+        interval -= 1
 
 
 def retry_on_error(func):
@@ -39,6 +42,7 @@ def retry_on_error(func):
                 print(f'Function {str(func)} failed {n} times')
                 sleep_s(n)
                 n += 1
+
     return looped_call
 
 
@@ -47,11 +51,13 @@ def sync_time():
     """
     Synchronize local time with NTP server
     """
+    import ntptime
+
+    print(f'begin clock synchronization using {config.NTP_SERVER}')
     ntptime.host = config.NTP_SERVER
-    print(f'begin clock synchronization using {ntptime.host}')
 
     t = ntptime.time()
-    tz_sec = config.TIMEZONE * 60 * 60
+    tz_sec = config.TIME_ZONE * 60 * 60
     tm = utime.localtime(t + tz_sec)
     tm = tm[0:3] + (0,) + tm[3:6] + (0,)
     machine.RTC().datetime(tm)

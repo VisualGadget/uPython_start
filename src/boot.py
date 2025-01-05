@@ -11,9 +11,9 @@ esp.osdebug(None)
 import wifi
 wifi.connect()
 
-if config.WEBREPL_ENABLE:
+if config.WEB_REPL_ENABLE:
     import webrepl
-    webrepl.start(password=config.WEBREPL_PASSWORD)
+    webrepl.start(password=config.WEB_REPL_PASSWORD)
 
 # break potential bootloop by giving time to connect and fix
 import utime

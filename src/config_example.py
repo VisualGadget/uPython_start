@@ -5,12 +5,12 @@ WIFI_SSID = 'wifi name'
 WIFI_PASSWORD = 'wifi password'
 
 # Web REPL
-WEBREPL_ENABLE = False
-WEBREPL_PASSWORD = ''
+WEB_REPL_ENABLE = False
+WEB_REPL_PASSWORD = ''
 
 # Clock
 NTP_SERVER = '3.ru.pool.ntp.org'
-TIMEZONE = 5  # GMT+TIMEZONE
+TIME_ZONE = 5  # GMT+TIMEZONE
 
 # Hardware
 WATCHDOG_ENABLE = False
