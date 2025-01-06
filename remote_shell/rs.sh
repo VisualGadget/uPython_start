@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rshell --port /dev/ttyUSB0
+rshell --port /dev/ttyUSB0 --rts 0 --dtr 0
 
 # cd /pyboard/
 # ...
