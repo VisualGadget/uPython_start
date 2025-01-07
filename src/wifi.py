@@ -5,13 +5,23 @@ import ubinascii
 import config
 
 
+def wifi_mac(nic: network.WLAN = None) -> str:
+    # """
+    # WiFi MAC
+    # """
+    if nic is None:
+        nic = network.WLAN()
+
+    return ubinascii.hexlify(nic.config('mac')).decode()
+
+
 def connect():
     # disable access point
     ap = network.WLAN(network.AP_IF)
     ap.active(False)
 
     nic = network.WLAN(network.STA_IF)
-    mac = ubinascii.hexlify(nic.config('mac')).decode()
+    mac = wifi_mac(nic)
     network.hostname(f'uPython {mac[-4:]}')
 
     if not nic.isconnected():

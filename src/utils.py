@@ -5,7 +5,7 @@ import config
 
 
 if config.WATCHDOG_ENABLE:
-    print('using watchdog')
+    print('Watchdog is on guard')
     wdt_class = machine.WDT
 else:
     # fake watchdog
