@@ -18,7 +18,8 @@ class WiFi():
         ap.active(False)
 
         self._nic = network.WLAN(network.STA_IF)
-        network.hostname(f'uPython {self.mac[-4:]}')
+        self._nic.active(True)
+        network.hostname(f'upython-{self.mac[-4:]}')
 
     @property
     def connected(self) -> bool:
@@ -34,7 +35,6 @@ class WiFi():
         assert not self.connected
 
         print('Connecting to WiFi')
-        self._nic.active(True)
         self._nic.connect(config.WIFI_SSID, config.WIFI_PASSWORD)
 
     def wait_for_connection(self):
