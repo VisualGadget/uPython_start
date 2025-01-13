@@ -10,6 +10,8 @@ import config
 class WiFi():
     # Wi-Fi network adapter management
 
+    BLINK_HALF_PERIOD_S = 0.3
+
     def __init__(self, status_led: Pin | None = None):
         self._led = status_led
 
@@ -30,6 +32,11 @@ class WiFi():
         # WiFi interface MAC
         return ubinascii.hexlify(self._nic.config('mac')).decode()
 
+    @property
+    def ip(self) -> str:
+        # WiFi interface IP
+        return self._nic.ifconfig()[0]
+
     def connect(self):
         # Start background connection to WiFI AP
         assert not self.connected
@@ -42,7 +49,7 @@ class WiFi():
             if self._led is not None:
                 self._led.value(not self._led.value())
 
-            time.sleep(0.3)
+            time.sleep(self.BLINK_HALF_PERIOD_S)
 
         if self._led is not None:
             self._led.off()
@@ -54,7 +61,7 @@ class WiFi():
             if self._led is not None:
                 self._led.value(not self._led.value())
 
-            await asyncio.sleep(0.3)
+            await asyncio.sleep(self.BLINK_HALF_PERIOD_S)
 
         if self._led is not None:
             self._led.off()
