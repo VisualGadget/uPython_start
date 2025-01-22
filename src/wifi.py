@@ -39,7 +39,7 @@ class WiFi():
 
     def connect(self):
         # Start background connection to WiFI AP
-        assert not self.connected
+        assert not self.connected, 'Already connected'
 
         print('Connecting to WiFi')
         self._nic.connect(config.WIFI_SSID, config.WIFI_PASSWORD)

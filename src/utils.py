@@ -53,7 +53,7 @@ def sync_time():
     """
     import ntptime
 
-    print(f'begin clock synchronization using {config.NTP_SERVER}')
+    print(f'Begin clock synchronization using {config.NTP_SERVER}')
     ntptime.host = config.NTP_SERVER
 
     t = ntptime.time()
@@ -61,4 +61,4 @@ def sync_time():
     tm = utime.localtime(t + tz_sec)
     tm = tm[0:3] + (0,) + tm[3:6] + (0,)
     machine.RTC().datetime(tm)
-    print('clock is synchronized')
+    print('Clock is synchronized')
