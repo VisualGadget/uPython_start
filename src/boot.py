@@ -11,6 +11,7 @@ import os
 
 if getattr(config, 'FILE_LOGGER', False):
     from io import IOBase
+    import time
 
     class FileLogger(IOBase):
 
@@ -20,11 +21,22 @@ if getattr(config, 'FILE_LOGGER', False):
             super().__init__()
 
             self._f = open('device.log', 'a')
+            self._new_line = True
+            self._last_line_time = time.time()
 
         def write(self, data):
+            if self._new_line:
+                now = time.time()
+                dt = now - self._last_line_time
+                self._f.write(f'+{dt:.1f}s: ')
+                self._last_line_time = now
+                self._new_line = False
+
             nb = self._f.write(data)
-            if nb and data[-1] == self.NEW_LINE_CODE:
+
+            if data and data[-1] == self.NEW_LINE_CODE:
                 self._f.flush()
+                self._new_line = True
 
             return nb
 
@@ -62,11 +74,11 @@ if config.WIFI_AT_BOOT or config.WEB_REPL_AT_BOOT:
 
 
 # break potential boot loop by giving time to connect and fix
-import utime
+import time
 try:
     for n in range(10, -1, -1):
         print(f'start in {n}s')
-        utime.sleep(1)
+        time.sleep(1)
 except OSError:
     from machine import soft_reset
     soft_reset()
