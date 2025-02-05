@@ -2,6 +2,7 @@
 
 import config
 
+
 # Logging
 import esp
 esp.osdebug(None)
@@ -43,7 +44,7 @@ if getattr(config, 'FILE_LOGGER', False):
         def readinto(self, b: bytearray):
             return None
 
-    os.dupterm(FileLogger(), 1)  # replace REPL on UART(0)
+    os.dupterm(FileLogger(), 1)  # replace REPL on UART(0) with file logger
 
 
 import machine
@@ -73,15 +74,19 @@ if config.WIFI_AT_BOOT or config.WEB_REPL_AT_BOOT:
         webrepl.start(password=config.WEB_REPL_PASSWORD)
 
 
-# break potential boot loop by giving time to connect and fix
-import time
-try:
-    for n in range(10, -1, -1):
-        print(f'start in {n}s')
-        time.sleep(1)
-except OSError:
-    from machine import soft_reset
-    soft_reset()
+# Break potential boot loop giving time to connect and fix
+import asyncio
+
+async def countdown(n: int):
+    try:
+        for n in range(n, 0, -1):
+            print(f'start in {n}s')
+            await asyncio.sleep(1)
+
+    except OSError:
+        machine.soft_reset()
+
+asyncio.run(countdown(10))
 
 
 import gc
